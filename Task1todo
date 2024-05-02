@@ -1,0 +1,39 @@
+from tkinter import *
+
+class ToDoList:
+    def __init__(self, root):
+        self.tasks = []
+        self.root = root
+        self.root.title("Python To-Do List")
+        self.root.geometry("300x400")  # Set the window size
+        self.root.configure(bg="#f0f0f0")  # Set background color
+
+        self.entry = Entry(self.root, width=30, font=("Arial", 12), bd=2)  # Set entry widget properties
+        self.addButton = Button(self.root, text="Add Task", command=self.add_task, bg="#4CAF50", fg="white", bd=2)  # Set button properties
+        self.delButton = Button(self.root, text="Delete Task", command=self.delete_task, bg="#f44336", fg="white", bd=2)  # Set button properties
+        self.listbox = Listbox(self.root, font=("Arial", 12), bd=2, selectbackground="#e0e0e0")  # Set listbox properties
+
+        # GUI Layout
+        self.entry.pack(pady=10)
+        self.addButton.pack(pady=5)
+        self.listbox.pack(expand=True, fill=BOTH, padx=10, pady=5)
+        self.delButton.pack(pady=5)
+
+    def add_task(self):
+        task = self.entry.get()
+        if task.strip() != "":  # Check if task is not empty or only whitespace
+            self.listbox.insert(END, task)
+            self.tasks.append(task)
+            self.entry.delete(0, END)
+
+    def delete_task(self):
+        try:
+            task_index = self.listbox.curselection()[0]
+            del self.tasks[task_index]  # Remove task from the tasks list
+            self.listbox.delete(task_index)
+        except IndexError:
+            pass
+
+root = Tk()
+to_do_list = ToDoList(root)
+root.mainloop()
