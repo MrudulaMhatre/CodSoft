@@ -1,0 +1,54 @@
+import tkinter as tk
+
+def add_to_display(value):
+    current_text = display.get()
+    display.set(current_text + str(value))
+
+def clear_display():
+    display.set("")
+
+def calculate():
+    expression = display.get()
+    try:
+        result = eval(expression)
+        display.set(result)
+    except Exception as e:
+        display.set("Error")
+
+root = tk.Tk()
+root.title("Calculator")
+
+display = tk.StringVar()
+display.set("")
+
+# Entry widget for display
+entry_display = tk.Entry(root, textvariable=display, font=("Arial", 14), justify="right")
+entry_display.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
+
+# Buttons for numbers and operations
+buttons = [
+    '7', '8', '9', '/',
+    '4', '5', '6', '*',
+    '1', '2', '3', '-',
+    '0', '.', '=', '+'
+]
+
+row = 1
+col = 0
+
+for button in buttons:
+    if button == '=':
+        tk.Button(root, text=button, command=calculate, bg="orange", fg="white", font=("Arial", 14)).grid(row=row, column=col, padx=5, pady=5, ipadx=20, ipady=10)
+    elif button == '0':
+        tk.Button(root, text=button, command=lambda b=button: add_to_display(b), bg="lightgray", fg="black", font=("Arial", 14)).grid(row=row, column=col, padx=5, pady=5, ipadx=20, ipady=10, columnspan=2)
+        col += 1
+    elif button in ['+', '-', '*', '/']:
+        tk.Button(root, text=button, command=lambda b=button: add_to_display(b), bg="lightblue", fg="black", font=("Arial", 14)).grid(row=row, column=col, padx=5, pady=5, ipadx=20, ipady=10)
+    else:
+        tk.Button(root, text=button, command=lambda b=button: add_to_display(b), bg="lightgreen", fg="black", font=("Arial", 14)).grid(row=row, column=col, padx=5, pady=5, ipadx=20, ipady=10)
+    col += 1
+    if col > 3:
+        col = 0
+        row += 1
+
+root.mainloop()
